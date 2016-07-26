@@ -99,12 +99,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller.cs" />
-    <Compile Include="Handlers\RequestHandler.cs" />
-    <Compile Include="HttpRequest.cs" />
-    <Compile Include="HttpResponse.cs" />
-    <Compile Include="HttpServer.cs" />
-    <Compile Include="Handlers\RESTHandler.cs" />
+    <Compile Include="GarageController.cs" />
     <Compile Include="StartupTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
