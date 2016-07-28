@@ -4,6 +4,7 @@ using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 using System;
 using System.Threading.Tasks;
 using Windows.Devices.Gpio;
+using Windows.Foundation;
 using Windows.Web.Http;
 
 namespace OpenGarageWebServer
@@ -52,8 +53,8 @@ namespace OpenGarageWebServer
             }
         }
         
-        [UriFormat("/garage/open")]
-        public IGetResponse OpenClose()
+        [UriFormat("/garage/openclose")]
+        public IAsyncOperation<IPostResponse> OpenClose()
         {
             try
             {
@@ -62,16 +63,16 @@ namespace OpenGarageWebServer
                     GarageOpening = true;
                     sigPinValue = GpioPinValue.High;
                     sigPin.Write(sigPinValue);
-                    Task.Delay(TimeSpan.FromSeconds(1));
+                    Task.Delay(TimeSpan.FromSeconds(1)).Wait();
                     sigPinValue = GpioPinValue.Low;
                     sigPin.Write(sigPinValue);
                     GarageOpening = false;
                 }
-                return new GetResponse(GetResponse.ResponseStatus.OK, new { garageOpenedClosed = true });
+                return Task.FromResult<IPostResponse>(new PostResponse(PostResponse.ResponseStatus.Created, "", new { openedGarageDoor = true })).AsAsyncOperation();
             }
             catch
             {
-                return new GetResponse(GetResponse.ResponseStatus.NotFound);
+                return Task.FromResult<IPostResponse>(new PostResponse(PostResponse.ResponseStatus.Conflict, "", new { openedGarageDoor = false })).AsAsyncOperation();
             }
         }
     }
